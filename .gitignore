@@ -1,0 +1,48 @@
+# Node modules
+node_modules/
+
+# Build output
+apps/*/build/
+dist/
+
+# Logs
+*.log
+logs/
+test-results/
+
+# Environment files
+.env
+.env.*
+
+# OS/IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# TypeScript
+*.tsbuildinfo
+
+# Coverage
+coverage/
+
+# Misc
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignore package-lock in subfolders (keep root lockfile)
+apps/*/package-lock.json
+packages/*/package-lock.json
+
+# Ignore Playwright output
+playwright-report/
+
+# Ignore Jest output
+jest-results/
+
+# Ignore Prettier config cache
+.prettier*
+
+# Ignore AGENTS.md if not needed
+AGENTS.md
