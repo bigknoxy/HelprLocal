@@ -1,134 +1,104 @@
 # HelprLocal
 
-... (existing content above) ...
+## Project Overview
+
+HelprLocal is a hyper-local volunteer matching platform designed to help small non-profits, community gardens, and local event organizers connect with volunteers for specific, short-term tasks. Unlike major volunteer management software, HelprLocal is lightweight, easy to use, and focused on "micro-volunteering" opportunities that might otherwise get lost in the noise of social media.
+
+### Real-World Problem
+
+Small organizations often need just a handful of volunteers for specific events (e.g., "We need 3 people to help at the food bank this Saturday from 9-12"). They lack the resources for complex software, and their calls for help on social media are often overlooked.
+
+### Project Solution
+
+HelprLocal provides a simple, two-sided platform:
+
+- **Organizations:** Can sign up and post micro-volunteering opportunities with dates, times, tasks, and the number of volunteers needed.
+- **Volunteers:** Can browse opportunities in their local area and sign up for a slot with one click. The platform handles sending confirmation and reminder notifications.
+
+### Key Skills Demonstrated
+
+- **Full-Stack Development:** React frontend, Express backend, TypeScript throughout.
+- **Database Design:** Models for Users, Organizations, Events, and Signups (currently in-memory for MVP).
+- **User Roles & Permissions:** Distinct dashboards and capabilities for volunteers vs. organization admins.
+- **Notifications System:** Organizations are notified when a volunteer signs up; volunteers receive reminders.
+
+### Potential Enhancements
+
+- Skill-based matching (e.g., request volunteers with "graphic design" skills)
+- Reputation system (track hours, thank volunteers)
+- Calendar integration (add commitments to Google/Outlook)
 
 ---
 
-## Backend API: Event Management & Notifications
+## How to Run the Project
 
-### 3. Create Event
+### Prerequisites
 
-- **Endpoint:** `POST /api/events`
-- **Description:** Create a new event (org admin only).
-- **Auth:** JWT required, role must be `org_admin`.
+- Node.js (v18+ recommended)
+- npm (v9+ recommended)
 
-#### Request Body
+### Install Dependencies
 
-```json
-{
-  "title": "Beach Cleanup",
-  "description": "Help clean the local beach.",
-  "date": "2025-08-10T09:00:00.000Z",
-  "startTime": "09:00",
-  "endTime": "12:00",
-  "location": "Main Beach",
-  "requiredVolunteers": 10,
-  "skillsRequired": ["teamwork"]
-}
+From the project root:
+
+```bash
+npm install
 ```
 
-#### Response (Success)
+### Start the Backend
 
-- **Status:** `201 Created`
-- **Body:** Event object
+From the project root:
 
-#### Response (Error)
-
-| Status | Example Response                                         | Description    |
-| ------ | -------------------------------------------------------- | -------------- |
-| 400    | `{ "error": "Missing required event fields" }`           | Missing fields |
-| 403    | `{ "error": "Forbidden: org admin only" }`               | Not org admin  |
-| 401    | `{ "error": "Missing or invalid authorization header" }` | No/invalid JWT |
-
----
-
-### 4. List Events
-
-- **Endpoint:** `GET /api/events`
-- **Description:** List all events, with optional filters.
-- **Auth:** Not required.
-
-#### Query Parameters
-
-- `date` (YYYY-MM-DD): Filter by date
-- `location`: Filter by location substring
-- `skill`: Filter by required skill
-
-#### Response (Success)
-
-- **Status:** `200 OK`
-- **Body:** Array of event objects
-
----
-
-### 5. Event Signup
-
-- **Endpoint:** `POST /api/events/:id/signup`
-- **Description:** Volunteer signs up for an event.
-- **Auth:** JWT required, role must be `volunteer`.
-
-#### Response (Success)
-
-- **Status:** `201 Created`
-- **Body:** `{ "message": "Signup successful" }`
-
-#### Response (Error)
-
-| Status | Example Response                                  | Description          |
-| ------ | ------------------------------------------------- | -------------------- |
-| 401    | `{ "error": "Invalid user" }`                     | No/invalid JWT       |
-| 404    | `{ "error": "Event not found" }`                  | Event does not exist |
-| 409    | `{ "error": "Already signed up for this event" }` | Duplicate signup     |
-
----
-
-### 6. Notifications
-
-- **Endpoint:** `GET /api/notifications`
-- **Description:** List notifications for the authenticated user (volunteer or org admin).
-- **Auth:** JWT required.
-
-#### Response (Success)
-
-- **Status:** `200 OK`
-- **Body:** Array of notification objects
-
-#### Notification Object
-
-```json
-{
-  "recipientId": "1",
-  "type": "signup",
-  "message": "User 2 signed up for event Beach Cleanup",
-  "timestamp": "2025-08-09T02:19:00.000Z"
-}
+```bash
+npx ts-node apps/backend/server.ts
 ```
 
-#### Response (Error)
+The backend runs on [http://localhost:4000](http://localhost:4000).
 
-| Status | Example Response              | Description    |
-| ------ | ----------------------------- | -------------- |
-| 401    | `{ "error": "Invalid user" }` | No/invalid JWT |
+### Start the Frontend
+
+From the project root:
+
+```bash
+cd apps/frontend
+npm run start
+```
+
+The frontend runs on [http://localhost:3000](http://localhost:3000).
 
 ---
 
-## API Usage Notes
+## Usage
 
-- All endpoints expect and return JSON.
-- JWT must be sent in the `Authorization: Bearer <token>` header for protected endpoints.
-- All date fields are ISO 8601 strings.
-- Error responses always include an `error` field.
+- **Register:** Use the "Sign Up" link on the login screen to create a volunteer or organization account.
+- **Login:** Log in with your credentials.
+- **Organizations:** Can post new events and view signups.
+- **Volunteers:** Can browse events and sign up for available slots.
+- **Notifications:** Both roles receive notifications for signups and reminders.
+
+---
+
+## API Summary
+
+- **POST /api/auth/register:** Register a new user (volunteer or org admin)
+- **POST /api/auth/login:** Log in and receive a JWT
+- **POST /api/events:** Create a new event (org admin only)
+- **GET /api/events:** List all events
+- **POST /api/events/:id/signup:** Volunteer signs up for an event
+- **GET /api/notifications:** List notifications for the authenticated user
 
 ---
 
 ## Edge Cases & Security
 
-- Email normalization prevents duplicate accounts.
-- Passwords are hashed with bcrypt.
-- JWT tokens expire in 7 days.
-- Volunteers cannot sign up for the same event twice.
-- Org admins only see notifications for their events.
+- Email normalization prevents duplicate accounts
+- Passwords are hashed (planned for MVP)
+- JWT tokens for authentication
+- Volunteers cannot sign up for the same event twice
+- Org admins only see notifications for their events
 
 ---
 
-For questions or suggestions, open an issue or contact the maintainers.
+## Contributing
+
+For questions or suggestions, open an issue or contact the maintainers at [https://github.com/bigknoxy/HelprLocal](https://github.com/bigknoxy/HelprLocal).
