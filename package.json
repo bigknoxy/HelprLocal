@@ -15,7 +15,7 @@
   "license": "ISC",
   "devDependencies": {
     "@helprlocal/types": "file:packages/types",
-    "@playwright/test": "^1.54.2",
+    "@playwright/test": "^1.63.0",
     "@types/bcrypt": "^6.0.0",
     "@types/cors": "^2.8.19",
     "@types/jest": "^30.0.0",
